@@ -11,28 +11,40 @@ function formatMoney(value) {
 function applyDiscount(total, discountRate) {
     return total * discountRate;
 }
+
 function applyTax(total, taxRate) {
     return total * taxRate;
 }
-function applyoffer(item) {
-    let normal = item.price * item.quantity;
-    let bogo = Math.ceil(item.quantity / 2) * item.price;
-    let halfoff = item.quantity >= 2 ? normal * 0.50 : normal;
+
+function applyoffer(price, quantity) {
+    let normal = price * quantity;
+    let bogo = Math.ceil(quantity / 2) * price;
+    let halfoff = quantity >= 2 ? normal * 0.50 : normal;
 
     return Math.min(normal, bogo, halfoff);
 }
 
+
+function showExpensiveItems(cart, minPrice) {
+    let expensive = cart.filter(({ price }) => price > minPrice);
+    console.log("Expensive Items:");
+    expensive.forEach(({ name, price }) => {
+        console.log(name + " -> " + formatMoney(price));
+    });
+}
+
 function checkout(cart, discountRate, taxRate, shiprate) {
-    let grandTotal = 0;
     let discount = 0;
     let shipping = 0;
+    let grandTotal = 0;
+
     discountRate = discountRate || 0;
     taxRate = taxRate || 0;
     shiprate = shiprate || 0;
 
-    for (let item of cart) {
-        let itemTotal = applyoffer(item);
-        console.log(item.name + " (x" + item.quantity + ") → " + formatMoney(itemTotal));
+    for (let { name, price, quantity } of cart) {
+        let itemTotal = applyoffer(price, quantity);
+        console.log(name + " (x" + quantity + ") -> " + formatMoney(itemTotal));
         grandTotal += itemTotal;
     }
 
@@ -63,4 +75,7 @@ function checkout(cart, discountRate, taxRate, shiprate) {
     console.log("Final Total: " + formatMoney(finalTotal));
 }
 
+
+showExpensiveItems(cart, 30);
 checkout(cart, 0.15, 0.08, 15);
+
