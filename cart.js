@@ -33,6 +33,27 @@ function showExpensiveItems(cart, minPrice) {
     });
 }
 
+
+function showCheapest(cart, maxPrice) {
+    let cheapest = cart.filter(({ price }) => price <= maxPrice);
+    console.log("Cheapest Items:");
+    cheapest.forEach(({ name, price }) => {
+        console.log(name + " -> " + formatMoney(price));
+    });
+}
+
+
+function averageofitems(cart) {
+    let sum = cart.reduce((sum, { price, quantity }) => {
+        return sum + applyoffer(price, quantity);
+    }, 0);
+
+    let average = sum / cart.length;
+    console.log("Average Item Total (after offers): " + formatMoney(average));
+}
+
+
+
 function checkout(cart, discountRate, taxRate, shiprate) {
     let discount = 0;
     let shipping = 0;
@@ -77,5 +98,6 @@ function checkout(cart, discountRate, taxRate, shiprate) {
 
 
 showExpensiveItems(cart, 30);
+showCheapest(cart, 30);
+averageofitems(cart);
 checkout(cart, 0.15, 0.08, 15);
-
