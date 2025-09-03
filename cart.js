@@ -52,6 +52,29 @@ function averageofitems(cart) {
     console.log("Average Item Total (after offers): " + formatMoney(average));
 }
 
+function listItems(cart){
+    let items = cart.map(({name,price,quantity})=>{
+        let total = applyoffer(price,quantity);
+        return (name +"x"+quantity+ "->"+ formatMoney(total))
+    })
+    console.log("cart items")
+    items.forEach(line => console.log(line))
+
+}
+
+function validateCart(cart){
+    if(cart.some(({price})=> price>100)){
+        console.log("Warning: Some items are expensive")
+    }
+    if(cart.every(({quantity})=> quantity>0)){
+        console.log(" All items are valid with proper quantities.")
+    } else {
+        console.log(" All items are invalid")
+    }
+}
+listItems(cart);
+validateCart(cart);
+checkout(cart, 0.15, 0.08, 15);
 
 
 function checkout(cart, discountRate, taxRate, shiprate) {
