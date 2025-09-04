@@ -76,6 +76,17 @@ listItems(cart);
 validateCart(cart);
 checkout(cart, 0.15, 0.08, 15);
 
+function sortCartByPrice(cart,order='asc'){
+    let sorted= [...cart].sort((a,b)=>{
+        return order==='asc' ? a.price-b.price:b.price-a.price
+    })
+    console.log("cart sorted by price (" + order + "):")
+    sorted.forEach(({name,price})=>{
+        console.log(name+ "->"+formatMoney(price))
+    })
+}
+sortCartByPrice(cart, "asc");
+sortCartByPrice(cart, "desc");
 
 function checkout(cart, discountRate, taxRate, shiprate) {
     let discount = 0;
